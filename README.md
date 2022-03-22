@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# Basic Social network built in React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is my first voyage into React and FSD. As a user with most of my web development in Backend PHP (writing e-commerce websites and RESTful APIs in frameworks such as Codeigniter), React is another realm compared to what I am normally used to.
 
-## Available Scripts
+## About the site
 
-In the project directory, you can run:
+The site is pretty simple. You can register, login, reset password, change your profile, see other users posts and create new posts.
 
-### `npm start`
+### Upcoming
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+I plan to add profile pictures, image content on posts, dark mode
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Why?
 
-### `npm test`
+Profile pictures for learning the basics on file management, post image for crude content distribution, dark mode for learning how to manage themes and retaining user-preferences.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Site design
 
-### `npm run build`
+I'm using [`react-boostrap`](https://react-bootstrap.github.io/) (Available on npm & yarn). Design is nothing special and I'm working on the technology not the way that the site works right now. It's great for prototyping and putting ideas together quickly and easily with a great selection of components to choose from.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## New Methods learned
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+I've learned a number of things while creating this project, some of which thought I would list here (more for my own reference than anything else)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### React Custom Components
 
-### `npm run eject`
+It took me quite a while to dynamically update and load each of the user posts. Posts are pulled from the DB then mapped onto a custom react component. The component will find and load the display name of the poster. You can actually see that the display name first loads as glowing placeholder object before being replaced.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### No-SQL
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Not necessarily learned, but re-learned.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+I particulary remember I've used MongoDB as part of a project to win a £125 Amazon voucher for 2nd prize in a hackathon contest at Manchester Met University. We created an online bicycle store, which would pull information from various document-oriented databases.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+I'm confident in the use of MySQL, so using No-SQL is a good skill to have.
 
-## Learn More
+### Git version control
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+I'm a terrible person for never using version control before. I guess I've known _how_ to use git, why it's important for use in large teams to allow collaboration, plus I've seen it used extensively by friends. But - I've never actually used it myself.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This was a great oppurtunity to make that step. I've been studying more about technologies and tools I'm likely to encounter in the real world, I couldn't imagine not using git in a commercial setting.
