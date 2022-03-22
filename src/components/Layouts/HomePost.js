@@ -45,22 +45,13 @@ export default function HomePost({ keyid, post }) {
         }
     }
 
-    const onNameChange = async(checkedvalue) => {
-        try {
-            var name = await getNameForUid(post.poster.id)
-            return name
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     return (
         <ListGroup.Item key={keyid} className="">
             <Row>
                 <Col>
-                    {loading?
+                    {posterName==="..."?
                     <Placeholder as="h4" animation="glow" style={{display: "inline"}}>
-                        <Placeholder xs={2} />
+                        <Placeholder xs={3} />
                     </Placeholder>
                     :
                     <h4 style={{display: "inline"}}>{posterName}</h4>

@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     
     function setName(newName){
         const changes = {}
-        changes[`/users/${currentUser.uid}/name`] = newName
+        changes[`/users/${auth.currentUser.uid}/name`] = newName
         return update(ref(db), changes)
       }
 
