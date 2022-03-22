@@ -1,0 +1,62 @@
+import React, { useState, useEffect } from 'react'
+import { Col, Row, ListGroup } from 'react-bootstrap'
+import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs'
+import { useAuth } from '../../contexts/AuthContext';
+import { usePost } from '../../contexts/PostContext';
+import Moment from 'react-moment';
+
+export default function HomePost({ keyid, post }) {
+    const { currentUser } = useAuth()
+    const { toggleThumbOnPost } = usePost()
+    const [isThumbed, setIsThumbed] = useState(false)
+    const [thumbCount, setThumbCount] = useState(0)
+
+    async function toggleThumb(){
+      try {
+        await toggleThumbOnPost(post.id).then(() => {
+            setIsThumbed(!isThumbed)
+            setThumbCount(thumbCount + (isThumbed?1:-1))
+        })
+      } catch(er){
+        console.error(er)
+      }
+    }
+
+    useEffect(() => {
+        setIsThumbed(!(post.thumbs && post.thumbs[currentUser.uid]))
+
+    }, []);
+
+    useEffect(() => {
+        setThumbCount(post.thumbCount)
+    }, []);
+
+
+
+    return (
+        <ListGroup.Item key={keyid} className="">
+            <Row>
+                <Col>
+                    <h4 style={{display: "inline"}}>{post.poster.name}</h4>&nbsp;
+                    <small className="inline">
+                        posted <Moment fromNow>{post.timestamp}</Moment>
+                    </small>
+                </Col>
+            </Row>
+            <Row>
+                <Col className="m-2">{post.text}</Col>
+            </Row>
+            <Row>
+                <Col className="">
+                    {isThumbed?<BsHandThumbsUp
+                        className='mb-2' 
+                        onClick={toggleThumb}
+                    />:<BsHandThumbsUpFill 
+                        className='mb-2' 
+                        onClick={toggleThumb}
+                    />} {thumbCount}
+                </Col>
+            </Row>
+        </ListGroup.Item>
+    )
+}
