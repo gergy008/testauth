@@ -53,6 +53,23 @@ export function PostProvider({ children }) {
       return sorted
     }
 
+    async function getNameForUid(uid){
+      const obj = await get(child(ref(db), `/users/${uid}/`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          if(data["name"] !== undefined)
+            return data.name
+          else return "User "+uid.substring(uid.length-6)
+        } else {
+          console.warn("Can't find user");
+          return { name: "Unknown user" }
+        }
+      }).catch((error) => {
+        console.error(error);
+      })
+      return obj
+    }
+
     async function toggleThumbOnPost(postid){
       const postRef = ref(db, `/posts/${postid}`);
       const uid = currentUser.uid
@@ -88,7 +105,8 @@ export function PostProvider({ children }) {
     const value = {
         makePost,
         getUserPosts,
-        toggleThumbOnPost
+        toggleThumbOnPost,
+        getNameForUid
     }
 
   return (

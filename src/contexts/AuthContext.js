@@ -5,7 +5,9 @@ import {
     signInWithEmailAndPassword,
     signOut, updateEmail, updatePassword,
     sendPasswordResetEmail, updateProfile
- } from 'firebase/auth'
+} from 'firebase/auth'
+import { ref, update } from "firebase/database";
+import { db } from '../database.js'
 import { auth } from '../firebase.js'
 import DOMPurify from 'dompurify';
 
@@ -24,8 +26,16 @@ export function AuthProvider({ children }) {
         const clean = DOMPurify.sanitize(name)
         return await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             updateProfile(userCredential.user, {displayName: clean})
+                .then(()=>{setName(name)})
+            
         })
     }
+    
+    function setName(newName){
+        const changes = {}
+        changes[`/users/${currentUser.uid}/name`] = newName
+        return update(ref(db), changes)
+      }
 
     function login(email, password) {
         return signInWithEmailAndPassword(auth, email, password)
@@ -45,7 +55,9 @@ export function AuthProvider({ children }) {
 
     function updateUserDisplayName(name){
         const clean = DOMPurify.sanitize(name)
+        
         return updateProfile(auth.currentUser, {displayName: clean})
+                .then(() => {setName(name)})
     }
 
     async function updateUserEmail(currentEmail, newEmail, password){

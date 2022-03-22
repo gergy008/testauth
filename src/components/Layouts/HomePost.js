@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Row, ListGroup } from 'react-bootstrap'
+import { Col, Row, ListGroup, Placeholder } from 'react-bootstrap'
 import { BsHandThumbsUp, BsHandThumbsUpFill } from 'react-icons/bs'
 import { useAuth } from '../../contexts/AuthContext';
 import { usePost } from '../../contexts/PostContext';
@@ -7,9 +7,11 @@ import Moment from 'react-moment';
 
 export default function HomePost({ keyid, post }) {
     const { currentUser } = useAuth()
-    const { toggleThumbOnPost } = usePost()
+    const { toggleThumbOnPost, getNameForUid } = usePost()
+    const [loading, setLoading] = useState(false)
     const [isThumbed, setIsThumbed] = useState(false)
     const [thumbCount, setThumbCount] = useState(0)
+    const [posterName, setPosterName] = useState("...")
 
     async function toggleThumb(){
       try {
@@ -24,20 +26,46 @@ export default function HomePost({ keyid, post }) {
 
     useEffect(() => {
         setIsThumbed(!(post.thumbs && post.thumbs[currentUser.uid]))
-
     }, []);
 
     useEffect(() => {
         setThumbCount(post.thumbCount)
     }, []);
 
+    useEffect(() => {
+        updateName()
+    }, [])
 
+    async function updateName() {
+        try {
+            const name = await getNameForUid(post.poster.id)
+            setPosterName(name)
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const onNameChange = async(checkedvalue) => {
+        try {
+            var name = await getNameForUid(post.poster.id)
+            return name
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <ListGroup.Item key={keyid} className="">
             <Row>
                 <Col>
-                    <h4 style={{display: "inline"}}>{post.poster.name}</h4>&nbsp;
+                    {loading?
+                    <Placeholder as="h4" animation="glow" style={{display: "inline"}}>
+                        <Placeholder xs={2} />
+                    </Placeholder>
+                    :
+                    <h4 style={{display: "inline"}}>{posterName}</h4>
+                    }
+                    &nbsp;
                     <small className="inline">
                         posted <Moment fromNow>{post.timestamp}</Moment>
                     </small>
