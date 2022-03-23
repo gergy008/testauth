@@ -7,11 +7,13 @@ import Profile from "./Profile";
 import Register from "./Register"
 import Login from "./Login";
 import Logout from "./Logout";
+import NotFound from "./NotFound";
 import RequireAuth from "./RequireAuth";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import ProfileWrapper from "./Layouts/ProfileWrapper";
 import Navigation from "./Layouts/Navigation";
+import About from "./About";
 
 function App() {
   return (
@@ -54,6 +56,12 @@ function App() {
       <Route path="/forgot-password" element={
         <ProfileWrapper><ForgotPassword /></ProfileWrapper>
       } />
+
+      <Route path="/about" element={<About/>} />
+
+      <Route path="/notfound" element={<NotFound/>} />
+
+      <Route path="*" element={<NotFound/>} />
     </Routes>
   </BrowserRouter>
 </AuthProvider>

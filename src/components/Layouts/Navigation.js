@@ -18,9 +18,12 @@ export default function Navigation() {
     }
 
     return (
-        <Navbar bg="light" variant="light">
+        <Navbar bg="dark" variant="dark">
             <Container>
             <Navbar.Brand href="/">{sitename}</Navbar.Brand>
+            <Nav className="me-auto">
+                <Nav.Link href="/about">About</Nav.Link> 
+            </Nav>
             <Nav className="me-right">
                 {greeting()}
             </Nav>
