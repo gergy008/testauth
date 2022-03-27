@@ -7,43 +7,43 @@ import HomePost from './Layouts/HomePost';
 
 export default function Home() {
   const { currentUser } = useAuth()
-  const { 
-    makePost, 
-    getUserPosts, 
-    setUserThumbedPost } = usePost()
+  const { makePost, getUserPosts } = usePost()
   const updateRef = useRef()
   const updateButtonRef = useRef()
   const [posting, setPosting] = useState('')
-  const [postData, setPostData] = useState('')
+  const [postData, setPostData] = useState([])
   const [loading, setLoading] = useState('')
-
-  var getData
+  const [updatePosts, setUpdatePosts] = useState(true)
 
   async function sendAThing(e) {
-    e.preventDefault()
-    return await makePost(updateRef.current.value).then(()=>{updatePosts()})
-  }
-
-  async function updatePosts(){
-    if(loading) return
-    setLoading(true)
-    console.log("Updating posts")
-    getData = await getUserPosts()
-    var temp = []
-    if(getData !== undefined)
-    Object.keys(getData).forEach(function(item) {
-      var len = temp.length
-      if(len < 10)
-        temp.push(getData[item]);
-    });
- 
-    setPostData(temp)
-    setLoading(false)
+    e.preventDefault();
+    setPosting(true);
+    var postPromise = await makePost(updateRef.current.value)
+                        .then(()=>{setUpdatePosts(true)})
+                        .finally(()=>{setPosting(false)});
+    return postPromise;
   }
 
   useEffect(() => {
-    updatePosts();
-  }, [])
+    async function pullPosts(){
+      var getData
+      if(loading || updatePosts === false) return
+      setLoading(true);
+      setUpdatePosts(false);
+      getData = await getUserPosts();
+      var temp = [];
+      if(getData !== undefined)
+        Object.keys(getData).forEach(function(item) {
+          if(temp.length < 10)
+            temp = [...temp, getData[item]];
+        });
+      if(temp.length > 0)
+        setPostData(temp); 
+      setLoading(false);
+    }
+    pullPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatePosts]);
 
   if(currentUser)
     return (
@@ -69,9 +69,12 @@ export default function Home() {
           <Card className="w-100 mt-5" style={{ maxWidth: "800px" }}>
             <Card.Header>Your feed</Card.Header>
             <ListGroup variant="flush">
-              {postData && postData.map(post => (
-                <HomePost keyid={post.id} post={post}/>
-              ))}
+              <ListGroup.Item key="non-exist" className=""></ListGroup.Item>
+              {postData && postData.map(post => {
+                return (
+                  <HomePost keyid={post.id} post={post} key={post.id}/>
+                )
+              })}
             </ListGroup>
           </Card>
         </Container>

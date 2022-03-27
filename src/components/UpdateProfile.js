@@ -1,26 +1,32 @@
-import React, { useRef, useState } from 'react'
-import { Card, Button, Form, Alert } from 'react-bootstrap'
+import React, { useRef, useState, useEffect } from 'react'
+import axios from "axios";
+import { Card, Button, Form, Alert, Placeholder } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import '../css/UpdateProfile.css';
+import { set } from 'firebase/database';
 
 export default function UpdateProfile() {
     const nameRef = useRef()
     const emailRef = useRef()
     const passwordCRef = useRef()
     const passwordNRef = useRef()
+    const inputFile = useRef() 
 
     const { 
         currentUser, 
         updateUserEmail, 
         updateUserPassword, 
-        updateUserDisplayName 
+        updateUserDisplayName,
+        getUserProfilePicture,
+        setUserProfilePicture
     } = useAuth()
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState('')
+    const [pp, setPP] = useState("...")
+    const [ppReload, setPPReload] = useState(true)
     const [passwordNShowing, setPasswordNShowing] = useState('')
-
-    console.error("Current user display name is: "+currentUser.displayName)
 
     function handleSubmit(e){
         e.preventDefault()
@@ -73,9 +79,50 @@ export default function UpdateProfile() {
         }
     }
 
+    const fileSelected = async(e) => {
+        console.log("File selected")
+        setError('')
+        setLoading(true)
+        setPPReload(false);
+        setPP(null)
+        var formData = new FormData();
+        formData.append("userid", currentUser.uid);
+        formData.append("file", inputFile.current.files[0]);
+        var http = axios({
+            baseURL: "https://gergy.co.uk/imageconvertendpoint.php",
+            method: "POST",
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+            responseType: "blob",
+        }).then( response => {
+            console.log("Got a response!")
+            console.log(response.data)
+            setUserProfilePicture(response.data)
+            setPPReload(true);
+            console.log("Reloading image...")
+        })
+        setLoading(false)
+    }
+
+    function fileChoose(){
+        console.log("PP clicked")
+        inputFile.current.click();
+    }
+
     const toggleNPassword = () => {
         setPasswordNShowing(!passwordNShowing)
     }
+
+    useEffect(() => {
+        async function changePP(){
+            console.log(`Trigger profile pic change - ppreload is: ${ppReload}`)
+            if(ppReload === false) return
+            setPP(await getUserProfilePicture())
+            setPPReload(false);
+        }
+        changePP()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pp, ppReload]);
 
     return (
         <>
@@ -84,10 +131,22 @@ export default function UpdateProfile() {
                 <h2 className='text-center mb-4'>Update Profile</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 {message && <Alert variant="success">{message}</Alert>}
+                <input type="file" id="ppfile" ref={inputFile} style={{display: 'none'}} accept="image/jpg,image/jpeg,image/png,image/bmp" onChange={fileSelected} />
+                {pp==="..."?
+                <Placeholder className="imageplaceholder" as="div" animation="glow">
+                    <Placeholder className="mx-auto my-3" style={{}}/>
+                </Placeholder>
+                :
+                <div className="mx-auto my-3 profileimage" style={{backgroundImage: `url(${pp})`}} onClick={fileChoose}>
+                    <div className='inside w-100 h-100'>
+                        <p className='w-100 m-0'>edit</p>
+                    </div>
+                </div>
+                }
                 <Form onSubmit={handleSubmit}>
                     <Form.Group id="name" className="p-1" aria-label='Email'>
                         <Form.Label>Display Name</Form.Label>
-                        <Form.Control type="text" ref={nameRef} defaultValue={currentUser.displayName} />
+                        <Form.Control type="text" ref={nameRef} defaultValue={currentUser.displayName} required/>
                     </Form.Group>
                     <Form.Group id="email" className="p-1">
                         <Form.Label>Email</Form.Label>

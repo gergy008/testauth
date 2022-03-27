@@ -1,10 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { ref, update, push, child, get, runTransaction, orderByChild } from "firebase/database";
 import { useAuth } from "./AuthContext";
 import { db } from '../database.js'
-import DOMPurify from 'dompurify';
-import { debugErrorMap } from 'firebase/auth';
-import { DropdownButton } from 'react-bootstrap';
 
 const PostContext = React.createContext()
 

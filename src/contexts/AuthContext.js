@@ -7,8 +7,10 @@ import {
     sendPasswordResetEmail, updateProfile
 } from 'firebase/auth'
 import { ref, update } from "firebase/database";
+import { ref as sRef, getDownloadURL, uploadBytes } from "firebase/storage";
 import { db } from '../database.js'
 import { auth } from '../firebase.js'
+import { storage } from '../cloudstore.js'
 import DOMPurify from 'dompurify';
 
 const AuthContext = React.createContext()
@@ -60,6 +62,27 @@ export function AuthProvider({ children }) {
                 .then(() => {setName(name)})
     }
 
+    function getUserProfilePictureReference(userid) {
+        return sRef(sRef(storage, `profilepictures`), `${userid}/profile.png`)
+    }
+
+    async function getUserProfilePicture(userid=auth.currentUser.uid){
+        return await getDownloadURL(getUserProfilePictureReference(userid))
+                            .catch((error) => {
+                                console.error(`Unable to get profile picture with error: ${error.code}`)
+                                return getDefaultProfilePicture()
+                            })
+    }
+
+    async function setUserProfilePicture(file){
+        var userid = auth.currentUser.uid
+        return await uploadBytes(getUserProfilePictureReference(userid), file)
+    }
+
+    function getDefaultProfilePicture(){
+        return getDownloadURL(sRef(storage, `profilepictures/default.png`))
+    }
+
     async function updateUserEmail(currentEmail, newEmail, password){
         const userCredential = await signInWithEmailAndPassword(auth, currentEmail, password)
         return updateEmail(userCredential, newEmail)
@@ -86,7 +109,10 @@ export function AuthProvider({ children }) {
         resetPassword,
         updateUserEmail,
         updateUserPassword,
-        updateUserDisplayName
+        updateUserDisplayName,
+        getUserProfilePicture,
+        getDefaultProfilePicture,
+        setUserProfilePicture
     }
 
   return (
