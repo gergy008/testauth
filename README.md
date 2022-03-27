@@ -8,15 +8,27 @@ The site is pretty simple. You can register, login, reset password, change your 
 
 ### Upcoming
 
-I plan to add profile pictures, image content on posts, dark mode
+I plan to add image content on posts, dark mode
 
 ### Why?
 
-Profile pictures for learning the basics on file management, post image for crude content distribution, dark mode for learning how to manage themes and retaining user-preferences.
+Post images for crude content distribution, dark mode for learning how to manage themes and retaining user-preferences.
 
 ## Site design
 
 I'm using [`react-boostrap`](https://react-bootstrap.github.io/) (Available on npm & yarn). Design is nothing special and I'm working on the technology not the way that the site works right now. It's great for prototyping and putting ideas together quickly and easily with a great selection of components to choose from.
+
+## Challenges
+
+If I spent a particular amount of time doing something, it would be fun to explain how I thought about the problem and worked out a solution
+
+### Image conversion
+
+One thing that any JS-based site struggles with is image manipulation. I tried a number of ways to allow a user to upload virtually any image, but depending on the filetype depended on how I was going to handle format conversion of the image. I decided in the end to utilise my PHP knowledge and the powerful tools available with GD libaries in PHP to create a RESTful image conversion endpoint.
+
+I can simply get and upload images from the react app to the endpoint; have the endpoint do its magic; and return a perfectly cropped & resized image with the correct aspect ratio for upload. There are multiple existing APIs for this, but I felt simply testing I would hit the very strict limits. Most only have less than 25 conversions before hitting paywalls.
+
+Check it out and upload some of your own. There's a 5MB limit for the source file.
 
 ## New Methods learned
 
