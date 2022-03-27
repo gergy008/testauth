@@ -4,7 +4,6 @@ import { Card, Button, Form, Alert, Placeholder } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import '../css/UpdateProfile.css';
-import { set } from 'firebase/database';
 
 export default function UpdateProfile() {
     const nameRef = useRef()
@@ -88,7 +87,7 @@ export default function UpdateProfile() {
         var formData = new FormData();
         formData.append("userid", currentUser.uid);
         formData.append("file", inputFile.current.files[0]);
-        var http = axios({
+        axios({
             baseURL: "https://gergy.co.uk/imageconvertendpoint.php",
             method: "POST",
             data: formData,
