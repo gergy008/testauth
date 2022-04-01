@@ -1,10 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { 
-    onAuthStateChanged,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut, updateEmail, updatePassword,
-    sendPasswordResetEmail, updateProfile
+    onAuthStateChanged, createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, signOut, updateEmail, 
+    updatePassword, sendPasswordResetEmail, updateProfile
 } from 'firebase/auth'
 import { ref, update } from "firebase/database";
 import { ref as sRef, getDownloadURL, uploadBytes } from "firebase/storage";
