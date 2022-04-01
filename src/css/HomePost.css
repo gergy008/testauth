@@ -1,0 +1,23 @@
+.postitem {
+  display: flex;
+}
+
+.poster span {
+  display: "inline";
+  border: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+img.poster {
+  display: "inline";
+  margin-right: 12px;
+}
+
+.postitem h4,
+.postitem small {
+  display: "inline";
+  align-self: center;
+}
