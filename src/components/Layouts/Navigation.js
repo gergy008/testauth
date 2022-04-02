@@ -23,6 +23,7 @@ export default function Navigation() {
             <Navbar.Brand href="/">{sitename}</Navbar.Brand>
             <Nav className="me-auto">
                 <Nav.Link href="/about">About</Nav.Link> 
+                <Nav.Link href="//gergus.co.uk/">Portfolio</Nav.Link> 
             </Nav>
             <Nav className="me-right">
                 {greeting()}
